@@ -19,15 +19,16 @@ from plotly.graph_objs import *
 import matplotlib.pyplot as plt
 import numpy as np
 from plotly.subplots import make_subplots
-from scipy.stats import gaussian_kde
+# from scipy.stats import gaussian_kde
 from matplotlib.colors import LinearSegmentedColormap
-from sklearn.neighbors import KernelDensity
+# from sklearn.neighbors import KernelDensity
 import geopandas as gpd
 import json
 from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
 from iteration_utilities import deepflatten
 
+import geopy.distance
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -257,7 +258,6 @@ Exploring distances between points
 df_points_dist = df_merged_w_points[["Autonomia","zona","latitud", "longitud"]]
 df_points_dist = df_points_dist.dropna().drop_duplicates()
 
-import geopy.distance
 distance_list = []
 for index_i, row_i in df_points_dist.iterrows() :
     list_dist = [geopy.distance.vincenty((row_i["latitud"], row_i["longitud"]), (row_j["latitud"], row_j["longitud"])).km 
@@ -345,31 +345,15 @@ autonomia_name = [
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 # Multi-dropdown options
-from controls import COUNTIES, WELL_STATUSES, WELL_TYPES, WELL_COLORS
-
 
 app = dash.Dash(
     __name__, meta_tags=[{"name": "viewport", "content": "width=device-width"}]
 )
 server = app.server
 
-# Create controls
-county_options = [
-    {"label": str(COUNTIES[county]), "value": str(county)} for county in COUNTIES
-]
 autonomia_options = [
     {"label": str(row_i), "value": str(row_i)}
     for  row_i in df_merged_w_points["Autonomia"].drop_duplicates()
-]
-
-well_type_options = [
-    {"label": str(WELL_TYPES[well_type]), "value": str(well_type)}
-    for well_type in WELL_TYPES
-]
-
-well_status_options = [
-    {"label": str(WELL_STATUSES[well_status]), "value": str(well_status)}
-    for well_status in WELL_STATUSES
 ]
 
 # Load data

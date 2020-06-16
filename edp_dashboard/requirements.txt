@@ -1,3 +1,13 @@
 pandas
 dash
 gunicorn
+dash
+dash_core_components
+dash_html_components
+scipy
+plotly
+scipy
+geopandas
+shapely
+iteration_utilities 
+geopy
